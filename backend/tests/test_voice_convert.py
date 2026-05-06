@@ -193,7 +193,6 @@ def app_client(tmp_data_dir, monkeypatch):
     """Build a TestClient wired to an in-memory DB and a stub S2S backend."""
     from backend.database.models import Base
     from backend.database.session import get_db
-    from sqlalchemy.pool import StaticPool
 
     # -- in-memory database --------------------------------------------------
     engine = create_engine(

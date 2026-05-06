@@ -12,7 +12,7 @@ from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
 from .. import config, models
-from ..database import VoiceProfile as DBVoiceProfile, get_db
+from ..database import VoiceConversion as DBVoiceConversion, VoiceProfile as DBVoiceProfile, get_db
 from ..models import VoiceConversionResponse, VoiceConversionListResponse
 from ..services import voice_convert as vc_service
 from ..services.task_queue import enqueue_generation
@@ -160,11 +160,7 @@ async def stream_voice_convert_status(conversion_id: str, db: Session = Depends(
         try:
             while True:
                 db.expire_all()
-                row = db.query(
-                    __import__(
-                        "backend.database", fromlist=["VoiceConversion"]
-                    ).VoiceConversion
-                ).filter_by(id=conversion_id).first()
+                row = db.query(DBVoiceConversion).filter_by(id=conversion_id).first()
                 if not row:
                     yield f"data: {json.dumps({'status': 'not_found', 'id': conversion_id})}\n\n"
                     return
@@ -210,8 +206,6 @@ def cancel_voice_convert(conversion_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Only active conversions can be cancelled")
 
     cancel_job(conversion_id)
-
-    from ..database import VoiceConversion as DBVoiceConversion
 
     row = db.query(DBVoiceConversion).filter_by(id=conversion_id).first()
     if row:

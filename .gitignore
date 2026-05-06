@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+app/package-lock.json
 bun.lockb
 __pycache__/
 *.py[cod]
