@@ -50,6 +50,8 @@ import type {
   MCPClientBinding,
   MCPClientBindingListResponse,
   MCPClientBindingUpsert,
+  VoiceConversionResponse,
+  VoiceConversionListResponse,
 } from './types';
 
 function formatErrorDetail(detail: unknown, fallback: string): string {
@@ -919,6 +921,66 @@ class ApiClient {
     }
 
     return response.blob();
+  }
+
+  // ── Voice-to-Voice Conversion ────────────────────────────────────────
+
+  async startVoiceConvert(params: {
+    file: File;
+    profileId: string;
+    engine?: string;
+    modelSize?: string;
+    language?: string;
+    seed?: number;
+    sttModel?: string;
+  }): Promise<VoiceConversionResponse> {
+    const url = `${this.getBaseUrl()}/voice-convert`;
+    const formData = new FormData();
+    formData.append('file', params.file);
+    formData.append('profile_id', params.profileId);
+    if (params.engine) formData.append('engine', params.engine);
+    if (params.modelSize) formData.append('model_size', params.modelSize);
+    if (params.language) formData.append('language', params.language);
+    if (params.seed !== undefined) formData.append('seed', String(params.seed));
+    if (params.sttModel) formData.append('stt_model', params.sttModel);
+
+    const response = await fetch(url, { method: 'POST', body: formData });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ detail: response.statusText }));
+      throw new Error(formatErrorDetail(error.detail, `HTTP error! status: ${response.status}`));
+    }
+
+    return response.json();
+  }
+
+  async listVoiceConversions(params?: {
+    profileId?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<VoiceConversionListResponse> {
+    const qs = new URLSearchParams();
+    if (params?.profileId) qs.set('profile_id', params.profileId);
+    if (params?.limit !== undefined) qs.set('limit', String(params.limit));
+    if (params?.offset !== undefined) qs.set('offset', String(params.offset));
+    const q = qs.toString();
+    return this.request<VoiceConversionListResponse>(`/voice-convert${q ? `?${q}` : ''}`);
+  }
+
+  async getVoiceConversion(conversionId: string): Promise<VoiceConversionResponse> {
+    return this.request<VoiceConversionResponse>(`/voice-convert/${conversionId}`);
+  }
+
+  async cancelVoiceConvert(conversionId: string): Promise<void> {
+    await this.request<void>(`/voice-convert/${conversionId}/cancel`, { method: 'POST' });
+  }
+
+  async deleteVoiceConversion(conversionId: string): Promise<void> {
+    await this.request<void>(`/voice-convert/${conversionId}`, { method: 'DELETE' });
+  }
+
+  getAudioUrl(audioPath: string): string {
+    return `${this.getBaseUrl()}/audio/${encodeURIComponent(audioPath)}`;
   }
 }
 

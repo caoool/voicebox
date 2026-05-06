@@ -521,3 +521,35 @@ export interface MCPClientBindingUpsert {
 export interface MCPClientBindingListResponse {
   items: MCPClientBinding[];
 }
+
+// ── Voice-to-Voice Conversion ─────────────────────────────────────────────
+
+export interface VoiceConversionResponse {
+  id: string;
+  profile_id: string;
+  source_audio_path?: string;
+  transcript?: string;
+  engine?: string;
+  model_size?: string;
+  language: string;
+  seed?: number;
+  audio_path?: string;
+  duration?: number;
+  status: 'generating' | 'completed' | 'failed';
+  error?: string;
+  created_at: string;
+}
+
+export interface VoiceConversionListResponse {
+  items: VoiceConversionResponse[];
+  total: number;
+}
+
+export interface VoiceConversionStatusEvent {
+  id: string;
+  status: 'generating' | 'completed' | 'failed';
+  duration?: number;
+  error?: string;
+  transcript?: string;
+  audio_path?: string;
+}

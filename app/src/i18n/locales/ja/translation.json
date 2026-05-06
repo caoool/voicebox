@@ -9,7 +9,8 @@
     "loading": "読み込み中…",
     "error": "エラー",
     "unknown": "不明",
-    "unknownError": "不明なエラー"
+    "unknownError": "不明なエラー",
+    "play": "再生"
   },
   "nav": {
     "generate": "生成",
@@ -20,7 +21,8 @@
     "audio": "オーディオ",
     "models": "モデル",
     "settings": "設定",
-    "updateBadge": "更新"
+    "updateBadge": "更新",
+    "voiceConvert": "変換"
   },
   "captures": {
     "title": "キャプチャ",
@@ -760,8 +762,13 @@
       }
     },
     "general": {
-      "docs": { "title": "ドキュメントを読む" },
-      "discord": { "title": "Discord に参加", "subtitle": "ヘルプやボイスの共有" },
+      "docs": {
+        "title": "ドキュメントを読む"
+      },
+      "discord": {
+        "title": "Discord に参加",
+        "subtitle": "ヘルプやボイスの共有"
+      },
       "serverUrl": {
         "title": "サーバー URL",
         "description": "Voicebox バックエンドサーバーのアドレス。",
@@ -1237,5 +1244,22 @@
       "migrationFailedGeneric": "モデルの移行に失敗しました",
       "migrationConnectionLost": "移行中に接続が切断されました"
     }
+  },
+  "voiceConvert": {
+    "title": "音声変換",
+    "subtitle": "ソース音声をターゲット音声プロファイルに変換します。",
+    "sourceAudio": "音源",
+    "dropAudio": "ここに音声をドロップ",
+    "targetProfile": "ターゲット音声",
+    "selectProfile": "プロファイルを選択…",
+    "engine": "TTSエンジン",
+    "modelSize": "モデルサイズ",
+    "language": "言語",
+    "sttModel": "Whisperモデル（転写）",
+    "converting": "変換中…",
+    "convert": "変換",
+    "history": "最近の変換",
+    "empty": "まだ変換がありません",
+    "noTranscript": "転写中…"
   }
 }

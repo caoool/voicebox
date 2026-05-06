@@ -22,6 +22,7 @@ import { SettingsLayout } from '@/components/ServerTab/ServerTab';
 import { Sidebar } from '@/components/Sidebar';
 import { StoriesTab } from '@/components/StoriesTab/StoriesTab';
 import { Toaster } from '@/components/ui/toaster';
+import { VoiceConvertTab } from '@/components/VoiceConvertTab/VoiceConvertTab';
 import { VoicesTab } from '@/components/VoicesTab/VoicesTab';
 import { useGenerationProgress } from '@/lib/hooks/useGenerationProgress';
 import { useModelDownloadToast } from '@/lib/hooks/useModelDownloadToast';
@@ -120,6 +121,13 @@ const capturesRoute = createRoute({
   component: CapturesTab,
 });
 
+// Voice-convert route
+const voiceConvertRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/voice-convert',
+  component: VoiceConvertTab,
+});
+
 // Effects route
 const effectsRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -204,6 +212,7 @@ const routeTree = rootRoute.addChildren([
   indexRoute,
   storiesRoute,
   capturesRoute,
+  voiceConvertRoute,
   voicesRoute,
   effectsRoute,
   modelsRoute,

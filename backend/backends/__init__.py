@@ -133,6 +133,54 @@ class TTSBackend(Protocol):
 
 
 @runtime_checkable
+class S2SBackend(Protocol):
+    """Protocol for Speech-to-Speech (voice conversion) backend implementations.
+
+    An S2SBackend converts source audio to target-speaker audio without
+    routing through a text intermediate.  The first implementation
+    (``LocalVCBackend``) uses the STT→TTS pipeline as a stand-in until a
+    dedicated end-to-end voice-conversion model is integrated.
+    """
+
+    async def convert(
+        self,
+        source_audio_path: str,
+        profile_id: str,
+        db,
+        engine: str = "qwen",
+        model_size: str = "1.7B",
+        language: str = "en",
+        seed: Optional[int] = None,
+        stt_model: str = "turbo",
+    ) -> Tuple[np.ndarray, int, str]:
+        """Convert source audio to the target speaker's voice.
+
+        Returns:
+            Tuple of (audio_array, sample_rate, transcript)
+        """
+        ...
+
+
+# Global S2S backend instance
+_s2s_backend: Optional[S2SBackend] = None
+_s2s_backend_lock = threading.Lock()
+
+
+def get_s2s_backend() -> S2SBackend:
+    """Get or create the local voice-conversion backend."""
+    global _s2s_backend
+
+    if _s2s_backend is None:
+        with _s2s_backend_lock:
+            if _s2s_backend is None:
+                from .local_vc_backend import LocalVCBackend
+
+                _s2s_backend = LocalVCBackend()
+
+    return _s2s_backend
+
+
+@runtime_checkable
 class STTBackend(Protocol):
     """Protocol for STT (Speech-to-Text) backend implementations."""
 
@@ -774,8 +822,9 @@ def get_llm_backend_for_engine(engine: str) -> LLMBackend:
 
 def reset_backends():
     """Reset backend instances (useful for testing)."""
-    global _tts_backend, _tts_backends, _stt_backend, _llm_backends
+    global _tts_backend, _tts_backends, _stt_backend, _llm_backends, _s2s_backend
     _tts_backend = None
     _tts_backends.clear()
     _stt_backend = None
     _llm_backends.clear()
+    _s2s_backend = None

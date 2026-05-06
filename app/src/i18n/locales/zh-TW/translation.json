@@ -9,7 +9,8 @@
     "loading": "載入中…",
     "error": "錯誤",
     "unknown": "未知",
-    "unknownError": "未知錯誤"
+    "unknownError": "未知錯誤",
+    "play": "播放"
   },
   "nav": {
     "generate": "生成",
@@ -20,7 +21,8 @@
     "audio": "音訊",
     "models": "模型",
     "settings": "設定",
-    "updateBadge": "更新"
+    "updateBadge": "更新",
+    "voiceConvert": "轉換"
   },
   "captures": {
     "title": "擷取",
@@ -760,8 +762,13 @@
       }
     },
     "general": {
-      "docs": { "title": "閱讀文件" },
-      "discord": { "title": "加入 Discord", "subtitle": "取得協助與分享聲音" },
+      "docs": {
+        "title": "閱讀文件"
+      },
+      "discord": {
+        "title": "加入 Discord",
+        "subtitle": "取得協助與分享聲音"
+      },
       "serverUrl": {
         "title": "伺服器 URL",
         "description": "Voicebox 後端伺服器的位址。",
@@ -1237,5 +1244,22 @@
       "migrationFailedGeneric": "遷移模型失敗",
       "migrationConnectionLost": "遷移期間連線中斷"
     }
+  },
+  "voiceConvert": {
+    "title": "語音轉換",
+    "subtitle": "將來源音訊轉換為目標聲音配置檔。",
+    "sourceAudio": "來源音訊",
+    "dropAudio": "拖拽音訊到此處或點擊上傳",
+    "targetProfile": "目標聲音配置",
+    "selectProfile": "選擇配置…",
+    "engine": "TTS引擎",
+    "modelSize": "模型大小",
+    "language": "語言",
+    "sttModel": "Whisper模型（轉錄）",
+    "converting": "轉換中…",
+    "convert": "轉換",
+    "history": "最近的轉換",
+    "empty": "尚無轉換記錄",
+    "noTranscript": "轉錄中…"
   }
 }
