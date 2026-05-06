@@ -9,7 +9,8 @@
     "loading": "Loading…",
     "error": "Error",
     "unknown": "Unknown",
-    "unknownError": "Unknown error"
+    "unknownError": "Unknown error",
+    "play": "Play"
   },
   "nav": {
     "generate": "Generate",
@@ -20,7 +21,8 @@
     "audio": "Audio",
     "models": "Models",
     "settings": "Settings",
-    "updateBadge": "Update"
+    "updateBadge": "Update",
+    "voiceConvert": "Convert"
   },
   "captures": {
     "title": "Captures",
@@ -760,8 +762,13 @@
       }
     },
     "general": {
-      "docs": { "title": "Read the Docs" },
-      "discord": { "title": "Join the Discord", "subtitle": "Get help & share voices" },
+      "docs": {
+        "title": "Read the Docs"
+      },
+      "discord": {
+        "title": "Join the Discord",
+        "subtitle": "Get help & share voices"
+      },
       "serverUrl": {
         "title": "Server URL",
         "description": "The address of your voicebox backend server.",
@@ -1237,5 +1244,22 @@
       "migrationFailedGeneric": "Failed to migrate models",
       "migrationConnectionLost": "Lost connection during migration"
     }
+  },
+  "voiceConvert": {
+    "title": "Voice Convert",
+    "subtitle": "Convert source audio to a target voice profile.",
+    "sourceAudio": "Source audio",
+    "dropAudio": "Drop audio here or click to upload",
+    "targetProfile": "Target voice profile",
+    "selectProfile": "Select a profile…",
+    "engine": "TTS Engine",
+    "modelSize": "Model size",
+    "language": "Language",
+    "sttModel": "Whisper model (transcription)",
+    "converting": "Converting…",
+    "convert": "Convert",
+    "history": "Recent conversions",
+    "empty": "No conversions yet",
+    "noTranscript": "Transcribing…"
   }
 }

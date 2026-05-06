@@ -43,6 +43,7 @@ def run_migrations(engine) -> None:
     _migrate_generation_versions(engine, inspector, tables)
     _migrate_capture_settings(engine, inspector, tables)
     _migrate_mcp_bindings(engine, inspector, tables)
+    _migrate_voice_conversions(engine, tables)
     _normalize_storage_paths(engine, tables)
 
 
@@ -290,6 +291,32 @@ def _supports_drop_column(engine) -> bool:
     if engine.dialect.name != "sqlite":
         return True
     return tuple(int(p) for p in sqlite3.sqlite_version.split(".")[:3]) >= (3, 35, 0)
+
+
+def _migrate_voice_conversions(engine, tables: set[str]) -> None:
+    """Create the voice_conversions table if it doesn't already exist."""
+    if "voice_conversions" in tables:
+        return
+    with engine.connect() as conn:
+        conn.execute(text("""
+            CREATE TABLE voice_conversions (
+                id VARCHAR PRIMARY KEY,
+                profile_id VARCHAR NOT NULL REFERENCES profiles(id),
+                source_audio_path VARCHAR,
+                transcript TEXT,
+                engine VARCHAR DEFAULT 'qwen',
+                model_size VARCHAR,
+                language VARCHAR DEFAULT 'en',
+                seed INTEGER,
+                audio_path VARCHAR,
+                duration FLOAT,
+                status VARCHAR DEFAULT 'generating',
+                error TEXT,
+                created_at DATETIME
+            )
+        """))
+        conn.commit()
+    logger.info("Created voice_conversions table")
 
 
 def _normalize_storage_paths(engine, tables: set[str]) -> None:

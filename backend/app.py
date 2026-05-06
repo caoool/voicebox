@@ -249,6 +249,17 @@ async def _run_startup(application: FastAPI) -> None:
         if result.rowcount > 0:
             logger.info("Marked %d stale generation(s) as failed", result.rowcount)
 
+        # Mark stale voice conversions as failed too
+        vc_result = db.execute(
+            sa_text(
+                "UPDATE voice_conversions SET status = 'failed', "
+                "error = 'Server was shut down during conversion' "
+                "WHERE status = 'generating'"
+            )
+        )
+        if vc_result.rowcount > 0:
+            logger.info("Marked %d stale voice conversion(s) as failed", vc_result.rowcount)
+
         from .database import VoiceProfile as DBVoiceProfile, Generation as DBGeneration
 
         profile_count = db.query(DBVoiceProfile).count()

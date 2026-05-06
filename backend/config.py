@@ -138,3 +138,10 @@ def get_models_dir() -> Path:
     path = _data_dir / "models"
     path.mkdir(parents=True, exist_ok=True)
     return path
+
+
+def get_voice_conversions_dir() -> Path:
+    """Get voice conversions output directory path."""
+    path = _data_dir / "voice_conversions"
+    path.mkdir(parents=True, exist_ok=True)
+    return path

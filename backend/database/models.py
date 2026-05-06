@@ -258,6 +258,32 @@ class MCPClientBinding(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
+class VoiceConversion(Base):
+    """A single voice-to-voice conversion job.
+
+    Source audio is transcribed with Whisper (STT), then resynthesised with
+    the target voice profile via the configured TTS engine.  The output is
+    stored in the generations directory and the row's status mirrors the
+    Generation lifecycle (generating → completed | failed).
+    """
+
+    __tablename__ = "voice_conversions"
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    profile_id = Column(String, ForeignKey("profiles.id"), nullable=False)
+    source_audio_path = Column(String, nullable=True)
+    transcript = Column(Text, nullable=True)
+    engine = Column(String, default="qwen")
+    model_size = Column(String, nullable=True)
+    language = Column(String, default="en")
+    seed = Column(Integer, nullable=True)
+    audio_path = Column(String, nullable=True)
+    duration = Column(Float, nullable=True)
+    status = Column(String, default="generating")  # generating | completed | failed
+    error = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
 class Capture(Base):
     """A single voice input capture (dictation, recording, or uploaded file).
 

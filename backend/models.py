@@ -793,3 +793,58 @@ class AvailableEffectsResponse(BaseModel):
     """Response listing all available effect types."""
 
     effects: List[AvailableEffect]
+
+
+# ── Voice-to-Voice Conversion ────────────────────────────────────────────────
+
+
+class VoiceConvertRequest(BaseModel):
+    """Request model for voice conversion.
+
+    Source audio is uploaded as a multipart file; this model covers the
+    remaining form fields that are passed alongside it.
+    """
+
+    profile_id: str
+    engine: Optional[str] = Field(
+        default="qwen",
+        pattern="^(qwen|qwen_custom_voice|luxtts|chatterbox|chatterbox_turbo|tada|kokoro)$",
+    )
+    model_size: Optional[str] = Field(
+        default="1.7B",
+        pattern="^(1\\.7B|0\\.6B|1B|3B|default)$",
+    )
+    language: str = Field(
+        default="en",
+        pattern="^(zh|en|ja|ko|de|fr|ru|pt|es|it|he|ar|da|el|fi|hi|ms|nl|no|pl|sv|sw|tr)$",
+    )
+    seed: Optional[int] = Field(None, ge=0)
+    stt_model: Optional[str] = Field(default="turbo")
+
+
+class VoiceConversionResponse(BaseModel):
+    """Response model for a voice conversion record."""
+
+    id: str
+    profile_id: str
+    source_audio_path: Optional[str] = None
+    transcript: Optional[str] = None
+    engine: Optional[str] = None
+    model_size: Optional[str] = None
+    language: str = "en"
+    seed: Optional[int] = None
+    audio_path: Optional[str] = None
+    duration: Optional[float] = None
+    status: str
+    error: Optional[str] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class VoiceConversionListResponse(BaseModel):
+    """Paginated list of voice conversions."""
+
+    items: List[VoiceConversionResponse]
+    total: int
